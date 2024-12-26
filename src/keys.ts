@@ -1,10 +1,11 @@
+import { Model } from './types'
 const alphabets = {
   a: 'e',
   as: 'i',
   af: 'u',
   afs: 'f',
-  asd: 's',
-  asf: 'v',
+  ad: 's',
+  ads: 'v',
   adf: 'h',
   s: 'a',
   sf: 'w',
@@ -32,23 +33,127 @@ export const keys = {
     a['k' + k] = v.toUpperCase(); // shift key
     return a;
   }, {}),
-  h: 'backspace', // backspace key
-  j: 'enter', // enter key
-  k: 'space', // space key
-  l: 'tab', // tab key
 
-  // shift key modifier
-  sh: 'delete', // delete key
-  sj: 'pgdown', // page down
-  sk: 'pgup', // page up
-  sl: 'tab', // tab key
+  ha: '0',
+  hs: '1',
+  hd: '2',
+  hf: '3',
+  has: '4',
+  had: '5',
+  haf: '6',
+  hfd: '7',
+  hfs: '8',
+  hfa: '9',
+  hsa: '+',
+  hsd: '*',
+  hsf: '^',
+  hda: '~',
+  hds: '%',
+  hdf: '$',
+
+  ja: '-',
+  js: '_',
+  jd: '.',
+  jf: ',',
+  jas: '+',
+  jsa: '=',
+  jdf: '/',
+  jfd: '\\',
+
+  jad: '(',
+  jaf: ')',
+  jsd: '[',
+  jsf: ']',
+  jda: '<',
+  jds: '>',
+  jfa: '{',
+  jfs: '}',
+
+  jasd: '?',
+  jasf: '|',
+  jads: '@',
+  jafs: '#',
+
+  jsad: ':',
+  jsaf: ';',
+  jsda: '!',
+  jsfa: '&',
+
+  jfda: '\'',
+  jfds: '\"',
+  jfad: '`',
+  jfsd: '~',
+
+  jdfa: '€',
+  jdfs: '¢',
+  jdaf: '¥',
+  jdsf: '£',
+
+  h: 'Backspace', // backspace key
+  j: 'Enter', // enter key
+  k: 'Space', // space key
+  l: 'Tab', // tab key
+  
+  sh: 'Delete', // backspace key
+  sj: '', // enter key
+  sk: '', // space key
+  sl: 'ShiftTab', // tab key
 
   // vi arrow keys
-  ah: 'left',
-  aj: 'down',
-  ak: 'up',
-  al: 'right',
+  ah: 'ArrowLeft',
+  aj: 'ArrowDown',
+  ak: 'ArrowUp',
+  al: 'ArrowRight',
+
+  // navigation modifier
+  sah: 'Home',
+  saj: 'PageDown',
+  sak: 'PageUp',
+  sal: 'End',
+  
+  // ctrl keys
+  dh: 'Insert',
+  dj: 'Undo',
+  dk: 'Copy',
+  dl: 'Paste',
 };
+
+export function append(m: Model, s: string) {
+  m.text = m.text.substring(0, m.cursor) + s + m.text.substring(m.cursor);
+  if (!m.inserting) {
+    m.cursor += s.length;
+  }
+}
+
+export const functions = {
+  Backspace: (m: Model) => {
+    if (m.cursor > 0) {
+      m.text = m.text.substring(0, m.cursor - 1) + m.text.substring(m.cursor);
+      m.cursor--;
+    } else {
+      m.cursor = 0;
+    }
+  },
+  Enter: (m: Model) => {
+    append(m, "\n")
+  },
+  Space: (m: Model) => {
+    append(m, " ")
+  },
+  Tab: (m: Model) => {
+    append(m, "\t")
+  },
+  ArrowLeft: (m: Model) => {
+    if (m.cursor > 0) {
+      m.cursor--;
+    }
+  },
+  ArrowRight: (m: Model) => {
+    if (m.cursor < m.text.length) {
+      m.cursor++;
+    }
+  },
+}
 
 /*
 A, a	  ▄ ▄▄▄
